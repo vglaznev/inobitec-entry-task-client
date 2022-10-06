@@ -2,6 +2,7 @@
 #define CHART_H
 
 #include <QtCharts/QChart>
+#include <QDebug>
 
 QT_CHARTS_BEGIN_NAMESPACE
 class QLineSeries;
@@ -18,8 +19,8 @@ public slots:
     void setSignalWidth(int);
     void setSignalColor(QColor);
     void render(qreal x, qreal y);
-    void zoomAmplitude();
-    void zoomPeriod();
+    void zoomAmplitude(int);
+    void zoomPeriod(int);
 
 public:
     Chart(QGraphicsItem *parent = nullptr);
@@ -31,6 +32,18 @@ private:
     QValueAxis* yAxis;
 
     QPen* seriesPen;
+
+    const qreal DEFAULT_X_SIZE = 10;
+    const qreal DEFAULT_Y_SIZE = 5;
+
+    qreal zoomX;
+    qreal zoomY;
+
+    qreal yAxisMax;
+    qreal yAxisMin;
+
+    qreal xAxisMax;
+    qreal xAxisMin;
 };
 
 #endif // CHART_H

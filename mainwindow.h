@@ -2,6 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QChartView>
+#include <QtMath>
+#include "chart.h"
+
+QT_CHARTS_USE_NAMESPACE
 
 namespace Ui {
 class MainWindow;
@@ -17,6 +22,10 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    QChartView* chartView;
+    qreal x;
 };
+
+void modifyX();
 
 #endif // MAINWINDOW_H

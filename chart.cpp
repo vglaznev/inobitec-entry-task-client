@@ -8,21 +8,29 @@ Chart::Chart(QGraphicsItem *parent) :
     series(nullptr),
     xAxis(new QValueAxis()),
     yAxis(new QValueAxis()),
-    seriesPen(new QPen())
+    seriesPen(new QPen()),
+    zoomX(1),
+    zoomY(1),
+    yAxisMax(DEFAULT_Y_SIZE / 2),
+    yAxisMin(-DEFAULT_Y_SIZE / 2),
+    xAxisMax(DEFAULT_X_SIZE),
+    xAxisMin(0)
 {
     legend()->hide();
 
     series = new QLineSeries(this);
     addSeries(series);
     series->setPen(*seriesPen);
+    series->setUseOpenGL(true); //?
 
     addAxis(xAxis, Qt::AlignBottom);
     addAxis(yAxis, Qt::AlignLeft);
     series->attachAxis(xAxis);
     series->attachAxis(yAxis);
     xAxis->setTickCount(5);
-    xAxis->setRange(0, 6.28);
-    yAxis->setRange(-1, 1);
+    xAxis->setRange(xAxisMin, xAxisMax);
+    yAxis->setRange(yAxisMin, yAxisMax);
+
 }
 
 Chart::~Chart()
@@ -46,12 +54,25 @@ void Chart::render(qreal x, qreal y){
         xAxis->setMin(xAxis->min() + (x - xAxis->max()));
         xAxis->setMax(x);
     }
+    if(y < yAxisMin || y > yAxisMax){
+        if(y < yAxisMin){
+            yAxisMin = y;
+        }
+        if(y > yAxisMax){
+            yAxisMax = y;
+        }
+        yAxis->setRange(yAxisMin * zoomY, yAxisMax * zoomY);
+    }
 }
-void Chart::zoomAmplitude(){
-    yAxis->setMax(yAxis->max() + 0.001);
-    yAxis->setMin(yAxis->min() - 0.001);
+void Chart::zoomAmplitude(int delta) {
+    zoomY = static_cast<qreal>(delta) / 10 + 1;
+    if(zoomY != 0.0){
+        yAxis->setRange(yAxisMin * zoomY, yAxisMax * zoomY);
+    }
 }
-void Chart::zoomPeriod(){
-    xAxis->setMax(xAxis->max() + 0.1);
-
+void Chart::zoomPeriod(int delta){
+    zoomX = static_cast<qreal>(delta) / 10 + 1;
+    if(zoomY != 0.0){
+        xAxis->setRange(yAxisMax - (yAxisMax - yAxisMin) * zoomY, yAxisMax);
+    }
 }
