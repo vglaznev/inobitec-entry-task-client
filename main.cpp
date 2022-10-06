@@ -1,3 +1,5 @@
+#include "chart.h"
+#include "mainwindow.h"
 #include <QApplication>
 #include <QMainWindow>
 #include <QLineSeries>
@@ -5,6 +7,7 @@
 #include <QChartView>
 #include <QtMath>
 #include <QTimer>
+#include <QtWidgets>
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -18,32 +21,20 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    QLineSeries* series= new QLineSeries();
-
-    QChart *chart = new QChart();
-    chart->legend()->hide();
-    chart->addSeries(series);
-    chart->createDefaultAxes();
-
-    QPen pen(QRgb(0x00000));
-    pen.setWidth(2);
-    series->setPen(pen);
+    Chart* chart = new Chart();
 
     QChartView *chartView = new QChartView(chart);
     chartView->setRenderHint(QPainter::Antialiasing);
 
     QTimer *m_timer = new QTimer();
-    QObject::connect(m_timer, &QTimer::timeout,
-                     [=](){series->append(x, qSin(x));
-                        modifyX();
-                       chart->scroll(1, 0);
-        });
-    m_timer->setInterval(20);
+    QObject::connect(m_timer, &QTimer::timeout, [=](){chart->render(x, qSin(x)); modifyX();});
+    m_timer->setInterval(10);
+    chart->setSignalWidth(4);
+    chart->setSignalColor(Qt::red);
     m_timer->start();
 
-    QMainWindow w;
+    MainWindow w;
     w.setCentralWidget(chartView);
-    w.resize(500, 300);
     w.show();
 
     return a.exec();
