@@ -24,10 +24,22 @@ MainWindow::MainWindow(QWidget *parent) :
     layout()->addWidget(chartView);
     connect(ui->horizontalSlider, &QSlider::valueChanged, chart, &Chart::setSignalWidth);
     connect(ui->verticalSlider, &QSlider::valueChanged, chart, &Chart::zoomAmplitude);
+    connect(this, &MainWindow::signalCurveColorChanged, chart, &Chart::setSignalColor);
     //connect(ui->horizontalSlider_2, &QSlider::valueChanged, chart, &Chart::zoomPeriod);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    QColor color = QColorDialog::getColor(Qt::black, this, tr("Выберите цвет"));
+    QPalette palette = ui->label->palette();
+    palette.setColor(ui->label->backgroundRole(), color);
+    ui->label->setPalette(palette);
+    emit signalCurveColorChanged(color, QPrivateSignal());
+
+    qDebug() << color;
 }
