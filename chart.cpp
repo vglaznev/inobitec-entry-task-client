@@ -23,11 +23,16 @@ Chart::Chart(QGraphicsItem *parent) :
     series->setPen(*seriesPen);
     series->setUseOpenGL(true); //?
 
+
+    xAxis->setTickType(QValueAxis::TicksDynamic);
+    xAxis->setTickAnchor(0.0);
+    xAxis->setTickInterval(2);
+
+
     addAxis(xAxis, Qt::AlignBottom);
     addAxis(yAxis, Qt::AlignLeft);
     series->attachAxis(xAxis);
     series->attachAxis(yAxis);
-    xAxis->setTickCount(5);
     xAxis->setRange(xAxisMin, xAxisMax);
     yAxis->setRange(yAxisMin, yAxisMax);
 
@@ -43,11 +48,14 @@ void Chart::setSignalWidth(int width){
     series->setPen(*seriesPen);
 
 }
+
 void Chart::setSignalColor(QColor color){
     seriesPen->setColor(color);
     series->setPen(*seriesPen);
 }
+
 void Chart::render(qreal x, qreal y){
+
     series->append(x, y);
     if(x > xAxis->max()){
         //scroll(x, 0);
@@ -64,12 +72,14 @@ void Chart::render(qreal x, qreal y){
         yAxis->setRange(yAxisMin * zoomY, yAxisMax * zoomY);
     }
 }
+
 void Chart::zoomAmplitude(int delta) {
     zoomY = static_cast<qreal>(delta) / 10 + 1;
     if(zoomY != 0.0){
         yAxis->setRange(yAxisMin * zoomY, yAxisMax * zoomY);
     }
 }
+
 void Chart::zoomPeriod(int delta){
     zoomX = static_cast<qreal>(delta) / 10 + 1;
     if(zoomY != 0.0){

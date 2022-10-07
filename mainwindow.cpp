@@ -11,13 +11,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     chartView = ui->graphicsView;
     Chart* chart = new Chart();
-
     chartView->setChart(chart);
     chartView->setRenderHint(QPainter::Antialiasing); //?
 
     QTimer *m_timer = new QTimer();
     QObject::connect(m_timer, &QTimer::timeout, [=](){chart->render(x, sin(x)*log(x)); x+=0.01;});
-    m_timer->setInterval(1);
+    m_timer->setInterval(10);
     chart->setSignalWidth(4);
     chart->setSignalColor(Qt::red);
     m_timer->start();
