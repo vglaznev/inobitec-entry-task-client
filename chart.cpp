@@ -82,7 +82,12 @@ void Chart::zoomAmplitude(int delta) {
 
 void Chart::zoomPeriod(int delta){
     zoomX = static_cast<qreal>(delta) / 10 + 1;
-    if(zoomY != 0.0){
-        xAxis->setRange(yAxisMax - (yAxisMax - yAxisMin) * zoomY, yAxisMax);
+    if(zoomX != 0.0){
+        qreal lastPointInSeries = series->at(series->count() - 1).x();
+        if(lastPointInSeries < xAxisMax){
+            xAxis->setMax(zoomX * xAxisMax);
+        } else {
+            xAxis->setMin(xAxis->max() - zoomX*(xAxisMax - xAxisMin));
+        }
     }
 }
