@@ -21,13 +21,11 @@ Chart::Chart(QGraphicsItem *parent) :
     series = new QLineSeries(this);
     addSeries(series);
     series->setPen(*seriesPen);
-    series->setUseOpenGL(true); //?
-
+    series->setUseOpenGL(true);
 
     xAxis->setTickType(QValueAxis::TicksDynamic);
     xAxis->setTickAnchor(0.0);
     xAxis->setTickInterval(2);
-
 
     addAxis(xAxis, Qt::AlignBottom);
     addAxis(yAxis, Qt::AlignLeft);

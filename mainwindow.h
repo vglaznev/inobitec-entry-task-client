@@ -21,7 +21,7 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_pushButton_clicked();
+    void on_curveColorChangeButton_clicked();
 
 signals:
     void signalCurveColorChanged(QColor, QPrivateSignal);
@@ -29,9 +29,6 @@ signals:
 private:
     Ui::MainWindow *ui;
     QChartView* chartView;
-    qreal x;
 };
-
-void modifyX();
 
 #endif // MAINWINDOW_H
