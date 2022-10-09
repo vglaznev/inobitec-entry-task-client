@@ -29,8 +29,14 @@ MainWindow::MainWindow(QWidget *parent) :
     layout()->addWidget(chartView);
 
 
-    connect(ui->amplitudeZoomSlider, &QSlider::valueChanged, this, &MainWindow::convertSliderToZoomRange);
-    connect(ui->periodZoomSlider, &QSlider::valueChanged, this, &MainWindow::convertSliderToZoomRange);
+    connect(ui->amplitudeZoomSlider, &QSlider::valueChanged,
+            [=](int value){
+                chart->zoomAmplitude(convertSliderValueToZoom(value));
+    });
+    connect(ui->periodZoomSlider, &QSlider::valueChanged,
+            [=](int value){
+                chart->zoomPeriod(convertSliderValueToZoom(value));
+    });
 
     connect(ui->curveWidthChangeSlider, &QSlider::valueChanged, chart, &Chart::setSignalWidth);
 
@@ -49,12 +55,6 @@ void MainWindow::on_curveColorChangeButton_clicked()
     emit signalCurveColorChanged(color, QPrivateSignal());
 }
 
-void MainWindow::convertSliderToZoomRange(int value){
-    QObject* obj = sender();
-    qreal zoom = static_cast<qreal>(value) / 10 + 1.1;
-    if(obj == ui->amplitudeZoomSlider){
-        static_cast<Chart*>(ui->graphicsView->chart())->zoomAmplitude(zoom);
-    } else if(obj == ui->periodZoomSlider){
-        static_cast<Chart*>(ui->graphicsView->chart())->zoomPeriod(zoom);
-    }
+qreal MainWindow::convertSliderValueToZoom(int value){
+    return static_cast<qreal>(value) / 10 + 1.1;
 }

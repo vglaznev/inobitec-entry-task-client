@@ -23,7 +23,6 @@ public:
 
 private slots:
     void on_curveColorChangeButton_clicked();
-    void convertSliderToZoomRange(int);
 
 signals:
     void signalCurveColorChanged(QColor, QPrivateSignal);
@@ -35,6 +34,7 @@ private:
     const qreal xAxisMaxZoom;
     const qreal yAxisMaxZoom;
 
+    qreal convertSliderValueToZoom(int);
 };
 
 #endif // MAINWINDOW_H
