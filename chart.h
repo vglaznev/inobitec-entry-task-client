@@ -1,17 +1,14 @@
 #ifndef CHART_H
 #define CHART_H
 
-#include <QtCharts/QChart>
-#include <QDebug>
+#include <QChart>
 
-QT_CHARTS_BEGIN_NAMESPACE
-class QLineSeries;
-class QValueAxis;
-QT_CHARTS_END_NAMESPACE
+namespace QtCharts {
+   class QValueAxis;
+   class QLineSeries;
+}
 
-QT_CHARTS_USE_NAMESPACE
-
-class Chart : public QChart
+class Chart : public QtCharts::QChart
 {
     Q_OBJECT
 
@@ -27,9 +24,9 @@ public:
     virtual ~Chart();
 
 private:
-    QLineSeries* series;
-    QValueAxis* xAxis;
-    QValueAxis* yAxis;
+    QtCharts::QLineSeries* series;
+    QtCharts::QValueAxis* xAxis;
+    QtCharts::QValueAxis* yAxis;
 
     QPen* seriesPen;
 

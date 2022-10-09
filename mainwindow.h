@@ -2,12 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QChartView>
-#include <QtMath>
-#include "colorbox.h"
-#include "chart.h"
 
-QT_CHARTS_USE_NAMESPACE
+namespace QtCharts {
+    class QChartView;
+}
 
 namespace Ui {
 class MainWindow;
@@ -29,7 +27,7 @@ signals:
 
 private:
     Ui::MainWindow *ui;
-    QChartView* chartView;
+    QtCharts::QChartView* chartView;
 
     const qreal xAxisMaxZoom;
     const qreal yAxisMaxZoom;

@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "chart.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -21,8 +22,8 @@ MainWindow::MainWindow(QWidget *parent) :
     currentTimeTimer->start();
 
     QObject::connect(m_timer, &QTimer::timeout, [=]() mutable {
-        static qreal x = 1;
-        chart->render(static_cast<qreal>(currentTimeTimer->elapsed()) / 1e3, sin(x)*log(x));
+        static qreal x = 0;
+        chart->render(static_cast<qreal>(currentTimeTimer->elapsed()) / 1e3, sin(x));
         x+=0.01;
     });
 

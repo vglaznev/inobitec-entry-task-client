@@ -1,9 +1,13 @@
 #include "chart.h"
-#include <QtCharts/QAbstractAxis>
-#include <QtCharts/QLineSeries>
-#include <QtCharts/QValueAxis>
+
+#include <QValueAxis>
+#include <QLineSeries>
+
+using QtCharts::QValueAxis;
+using QtCharts::QLineSeries;
 
 Chart::Chart(QGraphicsItem *parent) :
+    QtCharts::QChart (parent),
     series(nullptr),
     xAxis(new QValueAxis()),
     yAxis(new QValueAxis()),
