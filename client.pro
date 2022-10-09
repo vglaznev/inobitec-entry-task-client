@@ -25,14 +25,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++11
 
+
 SOURCES += \
         main.cpp \
         chart.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    colorbox.cpp
 
 HEADERS += \
     chart.h \
-    mainwindow.h
+    mainwindow.h \
+    colorbox.h
 
 FORMS += \
     mainwindow.ui

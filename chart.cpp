@@ -3,12 +3,11 @@
 #include <QtCharts/QLineSeries>
 #include <QtCharts/QValueAxis>
 
-
 Chart::Chart(QGraphicsItem *parent) :
     series(nullptr),
     xAxis(new QValueAxis()),
     yAxis(new QValueAxis()),
-    seriesPen(new QPen()),
+    seriesPen(new QPen(Qt::red)),
     zoomX(1),
     zoomY(1),
     yAxisMax(DEFAULT_Y_SIZE / 2),
@@ -53,7 +52,6 @@ void Chart::setSignalColor(QColor color){
 }
 
 void Chart::render(qreal x, qreal y){
-
     series->append(x, y);
     if(x > xAxis->max()){
         //scroll(x, 0);
@@ -71,18 +69,18 @@ void Chart::render(qreal x, qreal y){
     }
 }
 
-void Chart::zoomAmplitude(int delta) {
-    zoomY = static_cast<qreal>(delta) / 10 + 1;
-    if(zoomY != 0.0){
+void Chart::zoomAmplitude(qreal zoom) {
+    if(zoom > 0){
+        zoomY = zoom;
         yAxis->setRange(yAxisMin * zoomY, yAxisMax * zoomY);
     }
 }
 
-void Chart::zoomPeriod(int delta){
-    zoomX = static_cast<qreal>(delta) / 10 + 1;
-    if(zoomX != 0.0){
+void Chart::zoomPeriod(qreal zoom){
+    if(zoom > 0){
+        zoomX = zoom;
         qreal lastPointInSeries = series->at(series->count() - 1).x();
-        if(lastPointInSeries < xAxisMax){
+        if(lastPointInSeries < xAxis->max()){
             xAxis->setMax(zoomX * xAxisMax);
         } else {
             xAxis->setMin(xAxis->max() - zoomX*(xAxisMax - xAxisMin));

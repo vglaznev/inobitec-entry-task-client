@@ -4,7 +4,9 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    chartView(nullptr)
+    chartView(nullptr),
+    xAxisMaxZoom(2),
+    yAxisMaxZoom(2)
 {
     ui->setupUi(this);
 
@@ -24,17 +26,16 @@ MainWindow::MainWindow(QWidget *parent) :
         x+=0.01;
     });
 
-    m_timer->setInterval(10);
-    chart->setSignalWidth(4);
-    chart->setSignalColor(Qt::red);
-
     layout()->addWidget(chartView);
 
-    connect(ui->amplitudeZoomSlider, &QSlider::valueChanged, chart, &Chart::zoomAmplitude);
-    connect(ui->periodZoomSlider, &QSlider::valueChanged, chart, &Chart::zoomPeriod);
+
+    connect(ui->amplitudeZoomSlider, &QSlider::valueChanged, this, &MainWindow::convertSliderToZoomRange);
+    connect(ui->periodZoomSlider, &QSlider::valueChanged, this, &MainWindow::convertSliderToZoomRange);
 
     connect(ui->curveWidthChangeSlider, &QSlider::valueChanged, chart, &Chart::setSignalWidth);
-    connect(this, &MainWindow::signalCurveColorChanged, chart, &Chart::setSignalColor);
+
+    connect(ui->colorBox, &ColorBox::colorChanged, chart, &Chart::setSignalColor);
+    connect(this, &MainWindow::signalCurveColorChanged, ui->colorBox, &ColorBox::setColor);
 }
 
 MainWindow::~MainWindow()
@@ -44,9 +45,16 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_curveColorChangeButton_clicked()
 {
-    QColor color = QColorDialog::getColor(Qt::black, this, tr("Выберите цвет"));
-    QPalette palette = ui->label->palette();
-    palette.setColor(ui->label->backgroundRole(), color);
-    ui->label->setPalette(palette);
+    QColor color = QColorDialog::getColor(Qt::red, this, tr("Выберите цвет"));
     emit signalCurveColorChanged(color, QPrivateSignal());
+}
+
+void MainWindow::convertSliderToZoomRange(int value){
+    QObject* obj = sender();
+    qreal zoom = static_cast<qreal>(value) / 10 + 1.1;
+    if(obj == ui->amplitudeZoomSlider){
+        static_cast<Chart*>(ui->graphicsView->chart())->zoomAmplitude(zoom);
+    } else if(obj == ui->periodZoomSlider){
+        static_cast<Chart*>(ui->graphicsView->chart())->zoomPeriod(zoom);
+    }
 }

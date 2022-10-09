@@ -19,11 +19,11 @@ public slots:
     void setSignalWidth(int);
     void setSignalColor(QColor);
     void render(qreal x, qreal y);
-    void zoomAmplitude(int);
-    void zoomPeriod(int);
+    void zoomAmplitude(qreal);
+    void zoomPeriod(qreal);
 
 public:
-    Chart(QGraphicsItem *parent = nullptr);
+    explicit Chart(QGraphicsItem *parent = nullptr);
     virtual ~Chart();
 
 private:

@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QChartView>
 #include <QtMath>
+#include "colorbox.h"
 #include "chart.h"
 
 QT_CHARTS_USE_NAMESPACE
@@ -22,6 +23,7 @@ public:
 
 private slots:
     void on_curveColorChangeButton_clicked();
+    void convertSliderToZoomRange(int);
 
 signals:
     void signalCurveColorChanged(QColor, QPrivateSignal);
@@ -29,6 +31,10 @@ signals:
 private:
     Ui::MainWindow *ui;
     QChartView* chartView;
+
+    const qreal xAxisMaxZoom;
+    const qreal yAxisMaxZoom;
+
 };
 
 #endif // MAINWINDOW_H
