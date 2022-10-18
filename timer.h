@@ -10,10 +10,9 @@ class Timer : public QObject
     Q_OBJECT
 public:
     explicit Timer(QObject *parent = nullptr);
-    qreal stop();
+    virtual ~Timer();
 
-signals:
-    void elapsed(qreal);
+    qreal stop();
 
 public slots:
     void start();

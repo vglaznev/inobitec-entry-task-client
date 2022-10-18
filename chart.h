@@ -28,7 +28,7 @@ private:
     QtCharts::QValueAxis* xAxis;
     QtCharts::QValueAxis* yAxis;
 
-    QPen* seriesPen;
+    QPen seriesPen;
 
     const qreal DEFAULT_X_SIZE = 10;
     const qreal DEFAULT_Y_SIZE = 5;

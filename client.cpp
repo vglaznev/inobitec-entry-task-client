@@ -7,14 +7,13 @@
 Client::Client(QObject *parent) : QObject(parent)
 {
     socket = new QTcpSocket(this);
-    timer = new Timer(this);
+    connectionTimer = new Timer(this);
 
     connect(socket, &QTcpSocket::readyRead, this, &Client::readData);
     connect(socket, &QTcpSocket::connected, [this](){emit connected();});
     connect(socket, &QTcpSocket::disconnected, [this](){emit disconnected();});
 
-    connect(socket, &QTcpSocket::connected, timer, &Timer::start);
-    //connect(socket, &QTcpSocket::readyRead, timer, &Timer::stop);
+    connect(socket, &QTcpSocket::connected, connectionTimer, &Timer::start);
 }
 
 Client::~Client(){
@@ -37,9 +36,11 @@ void Client::disconnectFromServer(){
 
 void Client::readData(){
     QDataStream stream(socket);
+
     stream.startTransaction();
     qreal value;
     stream >> value;
     stream.commitTransaction();
-    emit newDataArrived(QPointF(timer->stop(), value));
+
+    emit newDataArrived(connectionTimer->stop(), value);
 }

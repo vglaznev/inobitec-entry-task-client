@@ -2,9 +2,13 @@
 
 #include <QElapsedTimer>
 
-Timer::Timer(QObject *parent) : QObject(parent)
+Timer::Timer(QObject *parent) :
+    QObject(parent),
+    timer(new QElapsedTimer())
 {
-    timer = new QElapsedTimer();
+}
+
+Timer::~Timer(){
 }
 
 void Timer::start() {

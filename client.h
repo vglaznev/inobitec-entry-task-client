@@ -17,7 +17,7 @@ public:
     void readData();
 
 signals:
-    void newDataArrived(QPointF);
+    void newDataArrived(qreal, qreal);
     void connected();
     void disconnected();
 
@@ -27,7 +27,7 @@ public slots:
 
 private:
     QTcpSocket* socket;
-    Timer* timer;
+    Timer* connectionTimer;
 };
 
 #endif // CLIENT_H

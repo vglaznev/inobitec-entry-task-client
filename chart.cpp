@@ -11,7 +11,7 @@ Chart::Chart(QGraphicsItem *parent) :
     series(nullptr),
     xAxis(new QValueAxis()),
     yAxis(new QValueAxis()),
-    seriesPen(new QPen(Qt::red)),
+    seriesPen(QPen(Qt::red)),
     zoomX(1),
     zoomY(1),
     yAxisMax(DEFAULT_Y_SIZE / 2),
@@ -23,7 +23,7 @@ Chart::Chart(QGraphicsItem *parent) :
 
     series = new QLineSeries(this);
     addSeries(series);
-    series->setPen(*seriesPen);
+    series->setPen(seriesPen);
     series->setUseOpenGL(true);
 
     xAxis->setTickType(QValueAxis::TicksDynamic);
@@ -45,20 +45,19 @@ Chart::~Chart()
 }
 
 void Chart::setSignalWidth(int width){
-    seriesPen->setWidth(width);
-    series->setPen(*seriesPen);
+    seriesPen.setWidth(width);
+    series->setPen(seriesPen);
 
 }
 
 void Chart::setSignalColor(QColor color){
-    seriesPen->setColor(color);
-    series->setPen(*seriesPen);
+    seriesPen.setColor(color);
+    series->setPen(seriesPen);
 }
 
 void Chart::render(QPointF point){
     series->append(point);
     if(point.x() > xAxis->max()){
-        //scroll(x, 0);
         xAxis->setMin(xAxis->min() + (point.x() - xAxis->max()));
         xAxis->setMax(point.x());
     }
