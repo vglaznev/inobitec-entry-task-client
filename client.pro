@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui charts
+QT       += core gui charts network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -30,12 +30,16 @@ SOURCES += \
         main.cpp \
         chart.cpp \
     mainwindow.cpp \
-    colorbox.cpp
+    colorbox.cpp \
+    client.cpp \
+    timer.cpp
 
 HEADERS += \
     chart.h \
     mainwindow.h \
-    colorbox.h
+    colorbox.h \
+    client.h \
+    timer.h
 
 FORMS += \
     mainwindow.ui

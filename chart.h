@@ -15,7 +15,7 @@ class Chart : public QtCharts::QChart
 public slots:
     void setSignalWidth(int);
     void setSignalColor(QColor);
-    void render(qreal x, qreal y);
+    void render(QPointF);
     void zoomAmplitude(qreal);
     void zoomPeriod(qreal);
 

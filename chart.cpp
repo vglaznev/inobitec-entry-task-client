@@ -55,19 +55,19 @@ void Chart::setSignalColor(QColor color){
     series->setPen(*seriesPen);
 }
 
-void Chart::render(qreal x, qreal y){
-    series->append(x, y);
-    if(x > xAxis->max()){
+void Chart::render(QPointF point){
+    series->append(point);
+    if(point.x() > xAxis->max()){
         //scroll(x, 0);
-        xAxis->setMin(xAxis->min() + (x - xAxis->max()));
-        xAxis->setMax(x);
+        xAxis->setMin(xAxis->min() + (point.x() - xAxis->max()));
+        xAxis->setMax(point.x());
     }
-    if(y < yAxisMin || y > yAxisMax){
-        if(y < yAxisMin){
-            yAxisMin = y;
+    if(point.y() < yAxisMin || point.y() > yAxisMax){
+        if(point.y() < yAxisMin){
+            yAxisMin = point.y();
         }
-        if(y > yAxisMax){
-            yAxisMax = y;
+        if(point.y() > yAxisMax){
+            yAxisMax = point.y();
         }
         yAxis->setRange(yAxisMin * zoomY, yAxisMax * zoomY);
     }
