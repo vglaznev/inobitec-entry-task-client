@@ -82,8 +82,7 @@ void Chart::zoomAmplitude(qreal zoom) {
 void Chart::zoomPeriod(qreal zoom){
     if(zoom > 0){
         zoomX = zoom;
-        qreal lastPointInSeries = series->at(series->count() - 1).x();
-        if(lastPointInSeries < xAxis->max()){
+        if(series->count() == 0 || series->at(series->count() - 1).x() < zoomX * DEFAULT_X_SIZE){
             xAxis->setMax(zoomX * xAxisMax);
         } else {
             xAxis->setMin(xAxis->max() - zoomX*(xAxisMax - xAxisMin));
