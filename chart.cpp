@@ -66,15 +66,20 @@ void Chart::setSignalColor(QColor color){
 void Chart::render(QPointF point){
     series->append(point);
 
-    if(series->count() == 2000){
+    //Если на графике достаточно много точек, убираем половину,
+    //чтобы не терять в производительности
+    //Эти точки (наиболее вероятно) не отображаются на графике
+    if(series->count() > 2000){
         series->replace(series->points().mid(1000, 2000));
     }
 
+    //Если точка выходит за пределы абциссы, сдвигаем ось
     if(point.x() > xAxis->max()){
         xAxis->setMin(xAxis->min() + (point.x() - xAxis->max()));
         xAxis->setMax(point.x());
     }
 
+    //Если точка выходит за пределы ординаты, увеличиваем её границы
     if(point.y() < yAxisMin || point.y() > yAxisMax){
         if(point.y() < yAxisMin){
             yAxisMin = point.y();

@@ -53,8 +53,9 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->connectionButton->setText("Открыть подключение");
     });
 
+    //Очищаем область с сигналом после дисконекта
+    //Чтобы при последующих подключениях область была готова для отрисовки
     connect(networkClient, &Client::disconnected, chart, &Chart::flush);
-
 
     connect(ui->connectionButton, &QPushButton::clicked, networkClient, [this] (bool checked) {
         if(checked) {
@@ -82,5 +83,6 @@ void MainWindow::on_curveColorChangeButton_clicked()
 
 qreal MainWindow::convertSliderValueToZoom(int value)
 {
+    //Приводим диапазон слайдера -10, -9, .., -10 к отрезку [0.1, 2.1]
     return static_cast<qreal>(value) / 10 + 1.1;
 }
