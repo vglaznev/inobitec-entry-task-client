@@ -95,7 +95,7 @@
   <widget class="QWidget" name="centralwidget">
    <widget class="QChartView" name="graphicsView">
     <property name="enabled">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
     <property name="geometry">
      <rect>
@@ -646,7 +646,7 @@
      <item>
       <widget class="QPushButton" name="connectionButton">
        <property name="text">
-        <string>Подключиться</string>
+        <string>Открыть подключение</string>
        </property>
        <property name="checkable">
         <bool>true</bool>

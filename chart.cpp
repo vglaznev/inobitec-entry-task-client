@@ -12,6 +12,8 @@ Chart::Chart(QGraphicsItem *parent) :
     xAxis(new QValueAxis()),
     yAxis(new QValueAxis()),
     seriesPen(QPen(Qt::red)),
+    DEFAULT_X_SIZE(10),
+    DEFAULT_Y_SIZE(5),
     zoomX(1),
     zoomY(1),
     yAxisMax(DEFAULT_Y_SIZE / 2),
@@ -32,8 +34,10 @@ Chart::Chart(QGraphicsItem *parent) :
 
     addAxis(xAxis, Qt::AlignBottom);
     addAxis(yAxis, Qt::AlignLeft);
+
     series->attachAxis(xAxis);
     series->attachAxis(yAxis);
+
     xAxis->setRange(xAxisMin, xAxisMax);
     yAxis->setRange(yAxisMin, yAxisMax);
 
@@ -44,10 +48,14 @@ Chart::~Chart()
 
 }
 
+void Chart::flush(){
+    series->clear();
+    xAxis->setRange(0, zoomX * xAxisMax);
+}
+
 void Chart::setSignalWidth(int width){
     seriesPen.setWidth(width);
     series->setPen(seriesPen);
-
 }
 
 void Chart::setSignalColor(QColor color){
@@ -57,10 +65,16 @@ void Chart::setSignalColor(QColor color){
 
 void Chart::render(QPointF point){
     series->append(point);
+
+    if(series->count() == 2000){
+        series->replace(series->points().mid(1000, 2000));
+    }
+
     if(point.x() > xAxis->max()){
         xAxis->setMin(xAxis->min() + (point.x() - xAxis->max()));
         xAxis->setMax(point.x());
     }
+
     if(point.y() < yAxisMin || point.y() > yAxisMax){
         if(point.y() < yAxisMin){
             yAxisMin = point.y();

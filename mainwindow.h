@@ -3,10 +3,6 @@
 
 #include <QMainWindow>
 
-namespace QtCharts {
-    class QChartView;
-}
-
 class Client;
 class Timer;
 
@@ -24,7 +20,6 @@ public:
 
 private slots:
     void on_curveColorChangeButton_clicked();
-    void on_connectionButton_clicked(bool checked);
 
 signals:
     void signalCurveColorChanged(QColor, QPrivateSignal);
@@ -32,7 +27,6 @@ signals:
 
 private:
     Ui::MainWindow *ui;
-    QtCharts::QChartView* chartView;
 
     Client* networkClient;
     QThread* networkThread;

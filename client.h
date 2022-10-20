@@ -2,7 +2,6 @@
 #define CLIENT_H
 
 #include <QObject>
-#include <QPointF>
 
 class QTcpSocket;
 class Timer;
@@ -12,7 +11,7 @@ class Client : public QObject
     Q_OBJECT
 public:
     explicit Client(QObject *parent = nullptr);
-    virtual ~Client();
+    ~Client();
 
     void readData();
 
@@ -20,6 +19,7 @@ signals:
     void newDataArrived(qreal, qreal);
     void connected();
     void disconnected();
+    void connectionFailed();
 
 public slots:
     bool connectToServer(QString, quint16);
