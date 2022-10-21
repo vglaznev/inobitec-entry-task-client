@@ -4,11 +4,11 @@
 #include <QTcpSocket>
 #include <QDataStream>
 
-Client::Client(QObject *parent) : QObject(parent)
+Client::Client(QObject *parent) :
+    QObject(parent),
+    socket(new QTcpSocket(this)),
+    connectionTimer(new Timer(this))
 {
-    socket = new QTcpSocket(this);
-    connectionTimer = new Timer(this);
-
     connect(socket, &QTcpSocket::readyRead, this, &Client::readData);
     connect(socket, &QTcpSocket::connected, this, &Client::connected);
     connect(socket, &QTcpSocket::disconnected, this, &Client::disconnected);

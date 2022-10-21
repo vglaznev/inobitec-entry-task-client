@@ -8,9 +8,9 @@ using QtCharts::QLineSeries;
 
 Chart::Chart(QGraphicsItem *parent) :
     QtCharts::QChart (parent),
-    series(nullptr),
-    xAxis(new QValueAxis()),
-    yAxis(new QValueAxis()),
+    series(new QLineSeries(this)),
+    xAxis(new QValueAxis(this)),
+    yAxis(new QValueAxis(this)),
     seriesPen(QPen(Qt::red)),
     DEFAULT_X_SIZE(10),
     DEFAULT_Y_SIZE(5),
@@ -23,7 +23,6 @@ Chart::Chart(QGraphicsItem *parent) :
 {
     legend()->hide();
 
-    series = new QLineSeries(this);
     addSeries(series);
     series->setPen(seriesPen);
     series->setUseOpenGL(true);
