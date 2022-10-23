@@ -4,9 +4,9 @@
 #include <QChart>
 
 namespace QtCharts {
-   class QValueAxis;
-   class QLineSeries;
-}
+class QValueAxis;
+class QLineSeries;
+} // namespace QtCharts
 
 class Chart : public QtCharts::QChart
 {
@@ -24,11 +24,10 @@ public:
     explicit Chart(QGraphicsItem *parent = nullptr);
     ~Chart();
 
-
 private:
-    QtCharts::QLineSeries* series;
-    QtCharts::QValueAxis* xAxis;
-    QtCharts::QValueAxis* yAxis;
+    QtCharts::QLineSeries *series;
+    QtCharts::QValueAxis *xAxis;
+    QtCharts::QValueAxis *yAxis;
 
     QPen seriesPen;
 

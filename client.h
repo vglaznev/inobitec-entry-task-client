@@ -26,8 +26,8 @@ public slots:
     void disconnectFromServer();
 
 private:
-    QTcpSocket* socket;
-    Timer* connectionTimer;
+    QTcpSocket *socket;
+    Timer *connectionTimer;
 };
 
 #endif // CLIENT_H

@@ -28,11 +28,10 @@ signals:
 private:
     Ui::MainWindow *ui;
 
-    Client* networkClient;
-    QThread* networkThread;
+    Client *networkClient;
+    QThread *networkThread;
 
     qreal convertSliderValueToZoom(int);
-
 };
 
 #endif // MAINWINDOW_H

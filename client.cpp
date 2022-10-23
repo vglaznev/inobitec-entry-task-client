@@ -1,13 +1,12 @@
 #include "client.h"
+
+#include <QDataStream>
+#include <QTcpSocket>
+
 #include "timer.h"
 
-#include <QTcpSocket>
-#include <QDataStream>
-
-Client::Client(QObject *parent) :
-    QObject(parent),
-    socket(new QTcpSocket(this)),
-    connectionTimer(new Timer(this))
+Client::Client(QObject *parent)
+    : QObject(parent), socket(new QTcpSocket(this)), connectionTimer(new Timer(this))
 {
     connect(socket, &QTcpSocket::readyRead, this, &Client::readData);
     connect(socket, &QTcpSocket::connected, this, &Client::connected);
@@ -16,26 +15,27 @@ Client::Client(QObject *parent) :
     connect(socket, &QTcpSocket::connected, connectionTimer, &Timer::start);
 }
 
-Client::~Client(){
+Client::~Client() { }
 
-}
-
-bool Client::connectToServer(QString host, quint16 port){
+bool Client::connectToServer(QString host, quint16 port)
+{
     socket->connectToHost(host, port);
 
-    if(!socket->waitForConnected(5000)){
+    if (!socket->waitForConnected(5000)) {
         emit connectionFailed();
         return false;
     }
     return true;
 }
 
-void Client::disconnectFromServer(){
-    //socket->disconnectFromHost();
-   socket->close();
+void Client::disconnectFromServer()
+{
+    // socket->disconnectFromHost();
+    socket->close();
 }
 
-void Client::readData(){
+void Client::readData()
+{
     QDataStream stream(socket);
 
     qreal value;

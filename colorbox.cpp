@@ -1,18 +1,16 @@
 #include "colorbox.h"
 
-ColorBox::ColorBox(QWidget* parent) :
-    QLabel(parent)
+ColorBox::ColorBox(QWidget *parent) : QLabel(parent)
 {
     setAttribute(Qt::WA_SetPalette, false);
     setAutoFillBackground(true);
     setColor(Qt::red);
 }
 
-ColorBox::~ColorBox() {
+ColorBox::~ColorBox() { }
 
-}
-
-void ColorBox::setColor(QColor color){
+void ColorBox::setColor(QColor color)
+{
     QPalette style = palette();
     style.setColor(backgroundRole(), color);
     setPalette(style);
