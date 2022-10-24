@@ -30,8 +30,7 @@ bool Client::connectToServer(QString host, quint16 port)
 
 void Client::disconnectFromServer()
 {
-    // socket->disconnectFromHost();
-    socket->close();
+    socket->disconnectFromHost();
 }
 
 void Client::readData()

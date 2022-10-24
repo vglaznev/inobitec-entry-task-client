@@ -28,7 +28,6 @@ public slots:
 private:
     QTcpSocket *socket;
     Timer *connectionTimer;
-    qreal currentTime;
 };
 
 #endif // CLIENT_H
