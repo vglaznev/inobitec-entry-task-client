@@ -18,8 +18,7 @@ public slots:
     void start();
 
 private:
-    QElapsedTimer* timer;
-
+    QElapsedTimer *timer;
 };
 
 #endif // TIMER_H

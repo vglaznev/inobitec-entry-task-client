@@ -7,7 +7,7 @@ class ColorBox : public QLabel
 {
     Q_OBJECT
 public:
-    explicit ColorBox(QWidget* parent = nullptr);
+    explicit ColorBox(QWidget *parent = nullptr);
     ~ColorBox();
 
 public slots:
