@@ -46,9 +46,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(networkClient, &Client::disconnected, this,
             [this]() { ui->connectionButton->setText("Открыть подключение"); });
 
-    // Очищаем область с сигналом после дисконекта
-    // Чтобы при последующих подключениях область была готова для отрисовки
-    connect(networkClient, &Client::disconnected, chart, &Chart::flush);
+    // Очищаем область с сигналом после коннекта, чтобы отрисовка происходила корректно
+    connect(networkClient, &Client::connected, chart, &Chart::flush);
 
     connect(ui->connectionButton, &QPushButton::clicked, networkClient, [this](bool checked) {
         if (checked) {
