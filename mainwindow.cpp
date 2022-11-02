@@ -33,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->curveWidthChangeSlider, &QSlider::valueChanged, chart, &Chart::setSignalWidth);
 
     // Управлением цветом сигнальной кривой
-    connect(ui->colorBox, &ColorBox::colorChanged, chart, &Chart::setSignalColor);
+    connect(ui->colorBox, &ColorBox::colorChanged, chart, &Chart::setSignalColorIncreasing);
     connect(this, &MainWindow::signalCurveColorChanged, ui->colorBox, &ColorBox::setColor);
 
     connect(networkClient, &Client::connectionFailed, this, [this]() {

@@ -5,10 +5,11 @@
 
 Chart::Chart(QGraphicsItem *parent)
     : QChart(parent),
-      series(new QLineSeries(this)),
+      increasingSeries(new QLineSeries(this)),
+      decreasingSeries(new QLineSeries(this)),
       xAxis(new QValueAxis(this)),
       yAxis(new QValueAxis(this)),
-      seriesPen(QPen(Qt::red)),
+      lastPoint(QPointF(0.0, 0.0)),
       DEFAULT_X_SIZE(10),
       DEFAULT_Y_SIZE(5),
       zoomX(1),
@@ -20,9 +21,14 @@ Chart::Chart(QGraphicsItem *parent)
 {
     legend()->hide();
 
-    addSeries(series);
-    series->setPen(seriesPen);
-    series->setUseOpenGL(true);
+    addSeries(increasingSeries);
+    addSeries(decreasingSeries);
+    
+    decreasingSeries->setPen(QPen(Qt::red));
+    decreasingSeries->setPen(QPen(Qt::blue));
+
+    increasingSeries->setUseOpenGL(true);
+    decreasingSeries->setUseOpenGL(true);
 
     xAxis->setTickType(QValueAxis::TicksDynamic);
     xAxis->setTickAnchor(0.0);
@@ -31,8 +37,10 @@ Chart::Chart(QGraphicsItem *parent)
     addAxis(xAxis, Qt::AlignBottom);
     addAxis(yAxis, Qt::AlignLeft);
 
-    series->attachAxis(xAxis);
-    series->attachAxis(yAxis);
+    increasingSeries->attachAxis(xAxis);
+    increasingSeries->attachAxis(yAxis);
+    decreasingSeries->attachAxis(xAxis);
+    decreasingSeries->attachAxis(yAxis);
 
     xAxis->setRange(xAxisMin, xAxisMax);
     yAxis->setRange(yAxisMin, yAxisMax);
@@ -42,24 +50,40 @@ Chart::~Chart() { }
 
 void Chart::flush()
 {
-    series->clear();
+    increasingSeries->clear();
+    decreasingSeries->clear();
     xAxis->setRange(0, zoomX * xAxisMax);
 }
 
 void Chart::setSignalWidth(int width)
 {
-    seriesPen.setWidth(width);
-    series->setPen(seriesPen);
+    QPen pen = increasingSeries->pen();
+    pen.setWidth(width);
+    increasingSeries->setPen(pen);
+
+    pen = decreasingSeries->pen();
+    pen.setWidth(width);
+    decreasingSeries->setPen(pen);
 }
 
-void Chart::setSignalColor(QColor color)
+void Chart::setSignalColorIncreasing(QColor color)
 {
-    seriesPen.setColor(color);
-    series->setPen(seriesPen);
+    QPen pen = increasingSeries->pen();
+    pen.setColor(color);
+    increasingSeries->setPen(pen);
+}
+
+void Chart::setSignalColorDecreasing(QColor color)
+{
+    QPen pen = decreasingSeries->pen();
+    pen.setColor(color);
+    increasingSeries->setPen(pen);
 }
 
 void Chart::render(QPointF point)
 {
+    QLineSeries* series = point.y() > lastPoint.y() ? increasingSeries : decreasingSeries;
+
     series->append(point);
 
     // Если на графике достаточно много точек, убираем половину,
@@ -86,6 +110,7 @@ void Chart::render(QPointF point)
         yAxis->setRange(yAxisMin * zoomY, yAxisMax * zoomY);
     }
 
+    lastPoint = point;
 }
 
 void Chart::zoomAmplitude(qreal zoom)
@@ -100,7 +125,7 @@ void Chart::zoomPeriod(qreal zoom)
 {
     if (zoom > 0) {
         zoomX = zoom;
-        if (series->count() == 0 || series->at(series->count() - 1).x() < zoomX * DEFAULT_X_SIZE) {
+        if (lastPoint.x() < zoomX * DEFAULT_X_SIZE) {
             xAxis->setMax(zoomX * xAxisMax);
         } else {
             xAxis->setMin(xAxis->max() - zoomX * (xAxisMax - xAxisMin));

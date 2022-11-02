@@ -12,7 +12,8 @@ class Chart : public QChart
 
 public slots:
     void setSignalWidth(int);
-    void setSignalColor(QColor);
+    void setSignalColorIncreasing(QColor);
+    void setSignalColorDecreasing(QColor);
     void render(QPointF);
     void zoomAmplitude(qreal);
     void zoomPeriod(qreal);
@@ -23,12 +24,12 @@ public:
     ~Chart();
 
 private:
-    QLineSeries *series;
+    QLineSeries *increasingSeries;
+    QLineSeries* decreasingSeries;
+    QPointF lastPoint;
     QValueAxis *xAxis;
     QValueAxis *yAxis;
-
-    QPen seriesPen;
-
+    
     const qreal DEFAULT_X_SIZE;
     const qreal DEFAULT_Y_SIZE;
 
