@@ -3,11 +3,8 @@
 #include <QValueAxis>
 #include <QLineSeries>
 
-using QtCharts::QLineSeries;
-using QtCharts::QValueAxis;
-
 Chart::Chart(QGraphicsItem *parent)
-    : QtCharts::QChart(parent),
+    : QChart(parent),
       series(new QLineSeries(this)),
       xAxis(new QValueAxis(this)),
       yAxis(new QValueAxis(this)),
@@ -88,6 +85,7 @@ void Chart::render(QPointF point)
         }
         yAxis->setRange(yAxisMin * zoomY, yAxisMax * zoomY);
     }
+
 }
 
 void Chart::zoomAmplitude(qreal zoom)

@@ -2,9 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QThread>
 
 class Client;
-class Timer;
+class QThread;
 
 namespace Ui {
 class MainWindow;

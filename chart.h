@@ -3,12 +3,10 @@
 
 #include <QChart>
 
-namespace QtCharts {
-class QValueAxis;
 class QLineSeries;
-} // namespace QtCharts
+class QValueAxis;
 
-class Chart : public QtCharts::QChart
+class Chart : public QChart
 {
     Q_OBJECT
 
@@ -25,9 +23,9 @@ public:
     ~Chart();
 
 private:
-    QtCharts::QLineSeries *series;
-    QtCharts::QValueAxis *xAxis;
-    QtCharts::QValueAxis *yAxis;
+    QLineSeries *series;
+    QValueAxis *xAxis;
+    QValueAxis *yAxis;
 
     QPen seriesPen;
 

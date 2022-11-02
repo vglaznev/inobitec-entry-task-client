@@ -2,6 +2,7 @@
 
 #include <QMessageBox>
 #include <QTcpSocket>
+#include <QColorDialog>
 
 #include "chart.h"
 #include "client.h"
