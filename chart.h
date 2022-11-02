@@ -5,6 +5,7 @@
 
 class QLineSeries;
 class QValueAxis;
+class SegmentQLineSeries;
 
 class Chart : public QChart
 {
@@ -24,9 +25,7 @@ public:
     ~Chart();
 
 private:
-    QLineSeries *increasingSeries;
-    QLineSeries* decreasingSeries;
-    QPointF lastPoint;
+    SegmentQLineSeries *series;
     QValueAxis *xAxis;
     QValueAxis *yAxis;
     
