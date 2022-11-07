@@ -1,4 +1,5 @@
 #include "chart.h"
+#include "SegmentQLineSeries.h"
 
 #include <QValueAxis>
 #include <QLineSeries>
@@ -8,7 +9,7 @@ using QtCharts::QValueAxis;
 
 Chart::Chart(QGraphicsItem *parent)
     : QtCharts::QChart(parent),
-      series(new QLineSeries(this)),
+      //series(new QLineSeries(this)),
       xAxis(new QValueAxis(this)),
       yAxis(new QValueAxis(this)),
       seriesPen(QPen(Qt::red)),
@@ -23,9 +24,11 @@ Chart::Chart(QGraphicsItem *parent)
 {
     legend()->hide();
 
-    addSeries(series);
+    series = new SegmentQLineSeries(this, xAxis, yAxis);
+
+    /*addSeries(series);
     series->setPen(seriesPen);
-    series->setUseOpenGL(true);
+    series->setUseOpenGL(true);*/
 
     xAxis->setTickType(QValueAxis::TicksDynamic);
     xAxis->setTickAnchor(0.0);
@@ -34,8 +37,8 @@ Chart::Chart(QGraphicsItem *parent)
     addAxis(xAxis, Qt::AlignBottom);
     addAxis(yAxis, Qt::AlignLeft);
 
-    series->attachAxis(xAxis);
-    series->attachAxis(yAxis);
+    /*series->attachAxis(xAxis);
+    series->attachAxis(yAxis);*/
 
     xAxis->setRange(xAxisMin, xAxisMax);
     yAxis->setRange(yAxisMin, yAxisMax);
@@ -45,32 +48,36 @@ Chart::~Chart() { }
 
 void Chart::flush()
 {
+    //series->clear();
     series->clear();
     xAxis->setRange(0, zoomX * xAxisMax);
 }
 
 void Chart::setSignalWidth(int width)
 {
-    seriesPen.setWidth(width);
-    series->setPen(seriesPen);
+    //seriesPen.setWidth(width);
+    //series->setPen(seriesPen);
+    series->setWidth(width);
 }
 
 void Chart::setSignalColor(QColor color)
 {
-    seriesPen.setColor(color);
-    series->setPen(seriesPen);
+    //seriesPen.setColor(color);
+    //series->setPen(seriesPen);
+    series->setColor(color, SegmentQLineSeries::INCREASING);
 }
 
 void Chart::render(QPointF point)
 {
+    //series->append(point);
     series->append(point);
 
     // Если на графике достаточно много точек, убираем половину,
     // чтобы не терять в производительности
     // Эти точки (наиболее вероятно) не отображаются на графике
-    if (series->count() > 2000) {
+    /*if (series->count() > 2000) {
         series->replace(series->points().mid(1000, 2000));
-    }
+    }*/
 
     // Если точка выходит за пределы абциссы, сдвигаем ось
     if (point.x() > xAxis->max()) {
@@ -102,7 +109,7 @@ void Chart::zoomPeriod(qreal zoom)
 {
     if (zoom > 0) {
         zoomX = zoom;
-        if (series->count() == 0 || series->at(series->count() - 1).x() < zoomX * DEFAULT_X_SIZE) {
+        if (/*series->count() == 0 || series->at(series->count() - 1).x()*/ series->size() == 0 || series->getLastPoint().x() < zoomX * DEFAULT_X_SIZE) {
             xAxis->setMax(zoomX * xAxisMax);
         } else {
             xAxis->setMin(xAxis->max() - zoomX * (xAxisMax - xAxisMin));

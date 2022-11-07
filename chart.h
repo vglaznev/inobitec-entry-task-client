@@ -8,6 +8,8 @@ class QValueAxis;
 class QLineSeries;
 } // namespace QtCharts
 
+class SegmentQLineSeries;
+
 class Chart : public QtCharts::QChart
 {
     Q_OBJECT
@@ -25,7 +27,8 @@ public:
     ~Chart();
 
 private:
-    QtCharts::QLineSeries *series;
+    //QtCharts::QLineSeries *series;
+    SegmentQLineSeries* series;
     QtCharts::QValueAxis *xAxis;
     QtCharts::QValueAxis *yAxis;
 
