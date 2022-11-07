@@ -47,7 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
             [this]() { ui->connectionButton->setText("Открыть подключение"); });
 
     // Очищаем область с сигналом после коннекта, чтобы отрисовка происходила корректно
-    connect(networkClient, &Client::connected, chart, &Chart::flush);
+    connect(networkClient, &Client::connected, chart, &Chart::flush, Qt::QueuedConnection);
 
     connect(ui->connectionButton, &QPushButton::clicked, networkClient, [this](bool checked) {
         if (checked) {
@@ -55,7 +55,7 @@ MainWindow::MainWindow(QWidget *parent)
         } else {
             networkClient->disconnectFromServer();
         }
-    });
+    }, Qt::QueuedConnection);
 
     networkThread = new QThread(this);
     networkClient->moveToThread(networkThread);
