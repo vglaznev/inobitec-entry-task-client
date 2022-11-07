@@ -19,8 +19,8 @@ MainWindow::MainWindow(QWidget *parent)
     layout()->addWidget(chartView);
 
     // Отрисовка нового значения
-    connect(networkClient, &Client::newDataArrived,
-            [chart](qreal x, qreal y) { chart->render(QPointF(x, y)); });
+    connect(networkClient, &Client::newDataArrived, chart,
+            [chart](qreal x, qreal y) { chart->render(QPointF(x, y)); }, Qt::QueuedConnection);
 
     // Управление амплитудой и периодом
     connect(ui->amplitudeZoomSlider, &QSlider::valueChanged,
@@ -64,6 +64,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    networkThread->quit();
     delete ui;
 }
 
