@@ -33,7 +33,7 @@ void SegmentQLineSeries::append(QPointF point) {
 	QLineSeries* lastSegment;
 	QLineSeries* currentSegment;
 	SegmentType currentSegmentType;
-	qDebug() << point;
+	
 	if (numberOfPoints != 0) {
 		lastSegment = segments.last();
 		QPointF lastPointInSeries = lastSegment->at(lastSegment->count() - 1);
@@ -55,6 +55,7 @@ void SegmentQLineSeries::append(QPointF point) {
 
 		currentSegment->setUseOpenGL(true);
 		chart->addSeries(currentSegment);
+		
 		currentSegment->attachAxis(xAxis);
 		currentSegment->attachAxis(yAxis);
 	}
@@ -68,6 +69,9 @@ void SegmentQLineSeries::append(QPointF point) {
 
 void SegmentQLineSeries::clear() {
 	numberOfPoints = 0;
+	for (auto segment : segments) {
+		chart->removeSeries(segment);
+	}
 	segments.clear();
 	segmentTypeIndexes[INCREASING].clear();
 	segmentTypeIndexes[DECREASING].clear();
@@ -80,6 +84,7 @@ void SegmentQLineSeries::setWidth(int _width) {
 		return;
 	}
 
+	//todo: fix empty size
 	QPen pen = segments[segmentTypeIndexes[INCREASING][0]]->pen();
 	pen.setWidth(width);
 
