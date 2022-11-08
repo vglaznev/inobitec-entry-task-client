@@ -16,3 +16,7 @@ void ColorBox::setColor(QColor color)
     setPalette(style);
     emit colorChanged(color);
 }
+
+QColor ColorBox::getColor() {
+    return palette().color(backgroundRole());
+}

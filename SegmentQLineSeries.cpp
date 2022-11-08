@@ -19,7 +19,7 @@ SegmentQLineSeries::SegmentQLineSeries(QChart* _chart, QValueAxis* _xAxis, QValu
 	lastSegmentType(INCREASING)
 {
 	segmentTypeColor.insert(INCREASING, Qt::red);
-	segmentTypeColor.insert(DECREASING, Qt::black);
+	segmentTypeColor.insert(DECREASING, Qt::blue);
 
 	segmentTypeIndexes.insert(INCREASING, QVector<int>());
 	segmentTypeIndexes.insert(DECREASING, QVector<int>());

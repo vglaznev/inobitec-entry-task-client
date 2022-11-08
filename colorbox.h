@@ -10,6 +10,8 @@ public:
     explicit ColorBox(QWidget *parent = nullptr);
     ~ColorBox();
 
+    QColor getColor();
+
 public slots:
     void setColor(QColor);
 
