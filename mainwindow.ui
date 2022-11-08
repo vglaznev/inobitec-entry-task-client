@@ -271,7 +271,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="ColorBox" name="colorBox">
+        <widget class="ColorBox" name="increasingColorBox">
          <property name="enabled">
           <bool>true</bool>
          </property>
@@ -299,13 +299,64 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="curveColorChangeButton">
+        <widget class="QPushButton" name="curveIncreasingColorChangeButton">
          <property name="text">
-          <string>Цвет графика</string>
+          <string>Цвет графика при возрастании</string>
          </property>
         </widget>
        </item>
       </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_5">
+       <item>
+        <widget class="ColorBox" name="decreasingColorBox">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="autoFillBackground">
+          <bool>true</bool>
+         </property>
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::Box</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Plain</enum>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="curveDecreasingColorChangeButton">
+         <property name="text">
+          <string>Цвет графика при убывании</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="disableColorChangeCheckBox">
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Отображать зоны возрастания/убывания</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>

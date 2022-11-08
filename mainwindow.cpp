@@ -6,6 +6,7 @@
 #include "chart.h"
 #include "client.h"
 #include "ui_mainwindow.h"
+#include "SegmentQLineSeries.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow), networkClient(new Client())
@@ -32,8 +33,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->curveWidthChangeSlider, &QSlider::valueChanged, chart, &Chart::setSignalWidth);
 
     // Управлением цветом сигнальной кривой
-    connect(ui->colorBox, &ColorBox::colorChanged, chart, &Chart::setSignalColor);
-    connect(this, &MainWindow::signalCurveColorChanged, ui->colorBox, &ColorBox::setColor);
+    connect(ui->increasingColorBox, &ColorBox::colorChanged, chart, std::bind(&Chart::setSignalColor, chart, std::placeholders::_1, SegmentQLineSeries::SegmentType::INCREASING));
+    connect(ui->decreasingColorBox, &ColorBox::colorChanged, chart, std::bind(&Chart::setSignalColor, chart, std::placeholders::_1, SegmentQLineSeries::SegmentType::DECREASING));
+    connect(this, &MainWindow::signalCurveIncreasingColorChanged, ui->increasingColorBox, &ColorBox::setColor);
+    connect(this, &MainWindow::signalCurveDecreasingColorChanged, ui->decreasingColorBox, &ColorBox::setColor);
 
     connect(networkClient, &Client::connectionFailed, this, [this]() {
         QMessageBox::warning(this, "Ошибка подключения",
@@ -68,10 +71,16 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_curveColorChangeButton_clicked()
+
+void MainWindow::on_curveIncreasingColorChangeButton_clicked()
 {
-    QColor color = QColorDialog::getColor(Qt::red, this, tr("Выберите цвет"));
-    emit signalCurveColorChanged(color, QPrivateSignal());
+    QColor color = QColorDialog::getColor(Qt::red, this, "Выберите цвет");
+    emit signalCurveIncreasingColorChanged(color, QPrivateSignal());
+}
+
+void MainWindow::on_curveDecreasingColorChangeButton_clicked() {
+    QColor color = QColorDialog::getColor(Qt::red, this, "Выберите цвет");
+    emit signalCurveDecreasingColorChanged(color, QPrivateSignal());
 }
 
 qreal MainWindow::convertSliderValueToZoom(int value)

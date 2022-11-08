@@ -1,5 +1,4 @@
 #include "chart.h"
-#include "SegmentQLineSeries.h"
 
 #include <QValueAxis>
 #include <QLineSeries>
@@ -60,11 +59,11 @@ void Chart::setSignalWidth(int width)
     series->setWidth(width);
 }
 
-void Chart::setSignalColor(QColor color)
+void Chart::setSignalColor(QColor color, SegmentQLineSeries::SegmentType segmentType)
 {
     //seriesPen.setColor(color);
     //series->setPen(seriesPen);
-    series->setColor(color, SegmentQLineSeries::INCREASING);
+    series->setColor(color, segmentType);
 }
 
 void Chart::render(QPointF point)

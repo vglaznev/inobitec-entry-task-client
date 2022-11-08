@@ -19,10 +19,12 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_curveColorChangeButton_clicked();
+    void on_curveIncreasingColorChangeButton_clicked();
+    void on_curveDecreasingColorChangeButton_clicked();
 
 signals:
-    void signalCurveColorChanged(QColor, QPrivateSignal);
+    void signalCurveIncreasingColorChanged(QColor, QPrivateSignal);
+    void signalCurveDecreasingColorChanged(QColor, QPrivateSignal);
     void renderNewPoint(QPointF, QPrivateSignal);
 
 private:

@@ -1,6 +1,8 @@
 #ifndef CHART_H
 #define CHART_H
 
+#include "SegmentQLineSeries.h"
+
 #include <QChart>
 
 namespace QtCharts {
@@ -16,7 +18,7 @@ class Chart : public QtCharts::QChart
 
 public slots:
     void setSignalWidth(int);
-    void setSignalColor(QColor);
+    void setSignalColor(QColor, SegmentQLineSeries::SegmentType);
     void render(QPointF);
     void zoomAmplitude(qreal);
     void zoomPeriod(qreal);
