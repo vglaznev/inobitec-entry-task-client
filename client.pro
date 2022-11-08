@@ -32,14 +32,16 @@ SOURCES += \
     mainwindow.cpp \
     colorbox.cpp \
     client.cpp \
-    timer.cpp
+    timer.cpp \
+    SegmentQLineSeries.cpp
 
 HEADERS += \
     chart.h \
     mainwindow.h \
     colorbox.h \
     client.h \
-    timer.h
+    timer.h \
+    SegmentQLineSeries.h
 
 FORMS += \
     mainwindow.ui

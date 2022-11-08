@@ -18,11 +18,9 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-private slots:
-    void on_curveColorChangeButton_clicked();
-
 signals:
-    void signalCurveColorChanged(QColor, QPrivateSignal);
+    void signalCurveIncreasingColorChanged(QColor, QPrivateSignal);
+    void signalCurveDecreasingColorChanged(QColor, QPrivateSignal);
     void renderNewPoint(QPointF, QPrivateSignal);
 
 private:

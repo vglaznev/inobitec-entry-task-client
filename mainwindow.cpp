@@ -6,6 +6,8 @@
 #include "chart.h"
 #include "client.h"
 #include "ui_mainwindow.h"
+#include "SegmentQLineSeries.h"
+#include "ColorChooseWidget.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow), networkClient(new Client())
@@ -19,8 +21,8 @@ MainWindow::MainWindow(QWidget *parent)
     layout()->addWidget(chartView);
 
     // Отрисовка нового значения
-    connect(networkClient, &Client::newDataArrived,
-            [chart](qreal x, qreal y) { chart->render(QPointF(x, y)); });
+    connect(networkClient, &Client::newDataArrived, chart,
+            [chart](qreal x, qreal y) { chart->render(QPointF(x, y)); }, Qt::QueuedConnection);
 
     // Управление амплитудой и периодом
     connect(ui->amplitudeZoomSlider, &QSlider::valueChanged,
@@ -32,8 +34,24 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->curveWidthChangeSlider, &QSlider::valueChanged, chart, &Chart::setSignalWidth);
 
     // Управлением цветом сигнальной кривой
-    connect(ui->colorBox, &ColorBox::colorChanged, chart, &Chart::setSignalColor);
-    connect(this, &MainWindow::signalCurveColorChanged, ui->colorBox, &ColorBox::setColor);
+    connect(ui->increasingColorChoose, &ColorChooseWidget::colorChanged, chart, std::bind(&Chart::setSignalColor, chart, std::placeholders::_1, SegmentQLineSeries::SegmentType::INCREASING));
+    connect(ui->decreasingColorChoose, &ColorChooseWidget::colorChanged, chart, std::bind(&Chart::setSignalColor, chart, std::placeholders::_1, SegmentQLineSeries::SegmentType::DECREASING));
+    connect(ui->disableColorChangeCheckBox, &QCheckBox::stateChanged, this, [this, chart](int state) {
+        if (state == Qt::CheckState::Checked) {
+            ui->decreasingColorChoose->hide();
+            ui->increasingColorChoose->setButtonTitle("Цвет графика");
+            chart->setSignalColor(ui->increasingColorChoose->getColor(), SegmentQLineSeries::SegmentType::DECREASING);
+            connect(ui->increasingColorChoose, &ColorChooseWidget::colorChanged, chart, std::bind(&Chart::setSignalColor, chart, std::placeholders::_1, SegmentQLineSeries::SegmentType::DECREASING));
+        }
+        else {
+            ui->decreasingColorChoose->show();
+            ui->increasingColorChoose->setButtonTitle("Цвет графика при убывании");
+            chart->setSignalColor(ui->decreasingColorChoose->getColor(), SegmentQLineSeries::SegmentType::DECREASING);
+            disconnect(ui->increasingColorChoose, nullptr, chart, nullptr);
+            connect(ui->increasingColorChoose, &ColorChooseWidget::colorChanged, chart, std::bind(&Chart::setSignalColor, chart, std::placeholders::_1, SegmentQLineSeries::SegmentType::INCREASING));
+        }
+        });
+    
 
     connect(networkClient, &Client::connectionFailed, this, [this]() {
         QMessageBox::warning(this, "Ошибка подключения",
@@ -47,7 +65,7 @@ MainWindow::MainWindow(QWidget *parent)
             [this]() { ui->connectionButton->setText("Открыть подключение"); });
 
     // Очищаем область с сигналом после коннекта, чтобы отрисовка происходила корректно
-    connect(networkClient, &Client::connected, chart, &Chart::flush);
+    connect(networkClient, &Client::connected, chart, &Chart::flush, Qt::QueuedConnection);
 
     connect(ui->connectionButton, &QPushButton::clicked, networkClient, [this](bool checked) {
         if (checked) {
@@ -55,7 +73,7 @@ MainWindow::MainWindow(QWidget *parent)
         } else {
             networkClient->disconnectFromServer();
         }
-    });
+    }, Qt::QueuedConnection);
 
     networkThread = new QThread(this);
     networkClient->moveToThread(networkThread);
@@ -64,13 +82,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    networkThread->quit();
     delete ui;
-}
-
-void MainWindow::on_curveColorChangeButton_clicked()
-{
-    QColor color = QColorDialog::getColor(Qt::red, this, tr("Выберите цвет"));
-    emit signalCurveColorChanged(color, QPrivateSignal());
 }
 
 qreal MainWindow::convertSliderValueToZoom(int value)

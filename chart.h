@@ -1,6 +1,8 @@
 #ifndef CHART_H
 #define CHART_H
 
+#include "SegmentQLineSeries.h"
+
 #include <QChart>
 
 namespace QtCharts {
@@ -8,13 +10,15 @@ class QValueAxis;
 class QLineSeries;
 } // namespace QtCharts
 
+class SegmentQLineSeries;
+
 class Chart : public QtCharts::QChart
 {
     Q_OBJECT
 
 public slots:
     void setSignalWidth(int);
-    void setSignalColor(QColor);
+    void setSignalColor(QColor, SegmentQLineSeries::SegmentType);
     void render(QPointF);
     void zoomAmplitude(qreal);
     void zoomPeriod(qreal);
@@ -25,7 +29,8 @@ public:
     ~Chart();
 
 private:
-    QtCharts::QLineSeries *series;
+    //QtCharts::QLineSeries *series;
+    SegmentQLineSeries* series;
     QtCharts::QValueAxis *xAxis;
     QtCharts::QValueAxis *yAxis;
 
