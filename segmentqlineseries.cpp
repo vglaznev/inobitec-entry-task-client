@@ -1,4 +1,4 @@
-#include "SegmentQLineSeries.h"
+#include "segmentqlineseries.h"
 
 #include <QChart>
 #include <QValueAxis>

@@ -6,8 +6,8 @@
 #include "chart.h"
 #include "client.h"
 #include "ui_mainwindow.h"
-#include "SegmentQLineSeries.h"
-#include "ColorChooseWidget.h"
+#include "segmentqlineseries.h"
+#include "colorchoosewidget.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow), networkClient(new Client())
@@ -45,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent)
         }
         else {
             ui->decreasingColorChoose->show();
-            ui->increasingColorChoose->setButtonTitle("Цвет графика при убывании");
+            ui->increasingColorChoose->setButtonTitle("Цвет графика при возрастании");
             chart->setSignalColor(ui->decreasingColorChoose->getColor(), SegmentQLineSeries::SegmentType::DECREASING);
             disconnect(ui->increasingColorChoose, nullptr, chart, nullptr);
             connect(ui->increasingColorChoose, &ColorChooseWidget::colorChanged, chart, std::bind(&Chart::setSignalColor, chart, std::placeholders::_1, SegmentQLineSeries::SegmentType::INCREASING));

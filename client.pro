@@ -33,7 +33,8 @@ SOURCES += \
     colorbox.cpp \
     client.cpp \
     timer.cpp \
-    SegmentQLineSeries.cpp
+    segmentqlineseries.cpp \
+    colorchoosewidget.cpp
 
 HEADERS += \
     chart.h \
@@ -41,7 +42,8 @@ HEADERS += \
     colorbox.h \
     client.h \
     timer.h \
-    SegmentQLineSeries.h
+    segmentqlineseries.h \
+    colorchoosewidget.h
 
 FORMS += \
     mainwindow.ui

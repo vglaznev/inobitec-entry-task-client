@@ -1,7 +1,7 @@
 #ifndef CHART_H
 #define CHART_H
 
-#include "SegmentQLineSeries.h"
+#include "segmentqlineseries.h"
 
 #include <QChart>
 
