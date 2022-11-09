@@ -19,7 +19,7 @@ ColorChooseWidget::ColorChooseWidget(QWidget* parent) :
 	layout->addWidget(button, Qt::AlignRight);
 
 	connect(button, &QPushButton::clicked, this, [this]() {
-		QColor color = QColorDialog::getColor(getColor(), this, "Выберите цвет");
+		QColor color = QColorDialog::getColor(getColor(), this, "Р’С‹Р±РµСЂРёС‚Рµ С†РІРµС‚");
 		setColor(color);
 		emit colorChanged(color);
 	});
