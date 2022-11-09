@@ -9,11 +9,8 @@ using QtCharts::QChart;
 using QtCharts::QLineSeries;
 using QtCharts::QValueAxis;
 
-SegmentQLineSeries::SegmentQLineSeries(QChart* _chart, QValueAxis* _xAxis, QValueAxis* _yAxis) :
-	QObject(_chart),
-	chart(_chart),
-	xAxis(_xAxis),
-	yAxis(_yAxis),
+SegmentQLineSeries::SegmentQLineSeries(QObject* parent) :
+	QObject(parent),
 	numberOfPoints(0),
 	width(1),
 	lastSegmentType(INCREASING)
@@ -53,11 +50,12 @@ void SegmentQLineSeries::append(QPointF point) {
 		pen.setWidth(width);
 		currentSegment->setPen(pen);
 
-		currentSegment->setUseOpenGL(true);
+		/*currentSegment->setUseOpenGL(true);
 		chart->addSeries(currentSegment);
 		
 		currentSegment->attachAxis(xAxis);
-		currentSegment->attachAxis(yAxis);
+		currentSegment->attachAxis(yAxis);*/
+		emit newSegmentAppend(currentSegment);
 	}
 	else {
 		currentSegment = lastSegment;

@@ -23,7 +23,7 @@ Chart::Chart(QGraphicsItem *parent)
 {
     legend()->hide();
 
-    series = new SegmentQLineSeries(this, xAxis, yAxis);
+    series = new SegmentQLineSeries(this);
 
     /*addSeries(series);
     series->setPen(seriesPen);
@@ -41,6 +41,9 @@ Chart::Chart(QGraphicsItem *parent)
 
     xAxis->setRange(xAxisMin, xAxisMax);
     yAxis->setRange(yAxisMin, yAxisMax);
+
+
+    connect(series, &SegmentQLineSeries::newSegmentAppend, this, &Chart::attachNewSegment);
 }
 
 Chart::~Chart() { }
@@ -114,4 +117,13 @@ void Chart::zoomPeriod(qreal zoom)
             xAxis->setMin(xAxis->max() - zoomX * (xAxisMax - xAxisMin));
         }
     }
+}
+
+void Chart::attachNewSegment(QLineSeries* segment)
+{
+    segment->setUseOpenGL(true);
+    addSeries(segment);
+
+    segment->attachAxis(xAxis);
+    segment->attachAxis(yAxis);
 }

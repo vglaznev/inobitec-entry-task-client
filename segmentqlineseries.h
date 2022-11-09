@@ -17,7 +17,7 @@ class SegmentQLineSeries : public QObject
 	Q_OBJECT
 
 public:
-	explicit SegmentQLineSeries(QtCharts::QChart*, QtCharts::QValueAxis*, QtCharts::QValueAxis*);
+	explicit SegmentQLineSeries(QObject* parent = nullptr);
 	~SegmentQLineSeries();
 
 	void append(QPointF);
@@ -36,6 +36,10 @@ public:
 		INCREASING,
 		DECREASING
 	};
+
+signals:
+
+	void newSegmentAppend(QtCharts::QLineSeries*);
 
 private:
 	QtCharts::QChart* chart;

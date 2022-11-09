@@ -24,6 +24,9 @@ public slots:
     void zoomPeriod(qreal);
     void flush();
 
+private slots:
+    void attachNewSegment(QtCharts::QLineSeries*);
+
 public:
     explicit Chart(QGraphicsItem *parent = nullptr);
     ~Chart();
