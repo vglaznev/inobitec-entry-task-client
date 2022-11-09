@@ -2,6 +2,7 @@
 #define TIMER_H
 
 #include <QObject>
+#include <memory>
 
 class QElapsedTimer;
 
@@ -18,7 +19,7 @@ public slots:
     void start();
 
 private:
-    QElapsedTimer *timer;
+    std::unique_ptr<QElapsedTimer> timer;
 };
 
 #endif

@@ -25,10 +25,6 @@ ColorChooseWidget::ColorChooseWidget(QWidget* parent) :
 	});
 }
 
-
-QString ColorChooseWidget::getButtonTitle() {
-	return button->text();
-}
 void ColorChooseWidget::setButtonTitle(QString title) {
 	button->setText(title);
 }
@@ -36,6 +32,7 @@ void ColorChooseWidget::setButtonTitle(QString title) {
 QColor ColorChooseWidget::getColor() {
 	return colorBox->getColor();
 }
+
 void ColorChooseWidget::setColor(QColor color) {
 	colorBox->setColor(color);
 }

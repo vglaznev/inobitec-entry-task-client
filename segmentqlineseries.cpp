@@ -29,7 +29,7 @@ SegmentQLineSeries::~SegmentQLineSeries() {
 void SegmentQLineSeries::append(QPointF point) {
 	QLineSeries* lastSegment;
 	QLineSeries* currentSegment;
-	SegmentType currentSegmentType;
+	SegmentType currentSegmentType = DECREASING;
 	
 	if (numberOfPoints != 0) {
 		lastSegment = segments.last();
@@ -91,7 +91,7 @@ void SegmentQLineSeries::setWidth(int _width) {
 
 void SegmentQLineSeries::setColor(QColor color, SegmentType segmentType) {
 
-	QVector<int>& indexOfSegments = segmentTypeIndexes[segmentType];
+	const QVector<int>& indexOfSegments = segmentTypeIndexes[segmentType];
 	segmentTypeColor[segmentType] = color;
 	
 	if (indexOfSegments.size() == 0) {
