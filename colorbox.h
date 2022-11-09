@@ -19,4 +19,4 @@ signals:
     void colorChanged(QColor);
 };
 
-#endif // COLORBOX_H
+#endif

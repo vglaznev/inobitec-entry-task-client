@@ -7,7 +7,7 @@ class Client;
 class Timer;
 
 namespace Ui {
-class MainWindow;
+    class MainWindow;
 }
 
 class MainWindow : public QMainWindow
@@ -32,4 +32,4 @@ private:
     qreal convertSliderValueToZoom(int);
 };
 
-#endif // MAINWINDOW_H
+#endif

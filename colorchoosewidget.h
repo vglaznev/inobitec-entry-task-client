@@ -1,7 +1,6 @@
 #ifndef COLORCHOOSEWIDGET_H
 #define COLORCHOOSEWIDGET_H
 
-
 #include <QWidget>
 
 class ColorBox;
@@ -33,5 +32,5 @@ private:
 	QPushButton* button;
 };
 
-#endif // COLORCHOOSEWIDGET_H
+#endif
 

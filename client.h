@@ -30,4 +30,4 @@ private:
     Timer *connectionTimer;
 };
 
-#endif // CLIENT_H
+#endif

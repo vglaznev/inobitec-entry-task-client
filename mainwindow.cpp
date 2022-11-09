@@ -88,6 +88,6 @@ MainWindow::~MainWindow()
 
 qreal MainWindow::convertSliderValueToZoom(int value)
 {
-    // Приводим диапазон слайдера -10, -9, .., -10 к отрезку [0.1, 2.1]
+    // Приводим диапазон слайдера -10, -9, .., 10 к отрезку [0.1, 2.1]
     return static_cast<qreal>(value) / 10 + 1.1;
 }

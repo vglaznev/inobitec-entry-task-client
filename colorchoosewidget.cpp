@@ -22,7 +22,7 @@ ColorChooseWidget::ColorChooseWidget(QWidget* parent) :
 		QColor color = QColorDialog::getColor(getColor(), this, "Выберите цвет");
 		setColor(color);
 		emit colorChanged(color);
-		});
+	});
 }
 
 

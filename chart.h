@@ -6,9 +6,9 @@
 #include <QChart>
 
 namespace QtCharts {
-class QValueAxis;
-class QLineSeries;
-} // namespace QtCharts
+    class QValueAxis;
+    class QLineSeries;
+}
 
 class SegmentQLineSeries;
 
@@ -32,7 +32,6 @@ public:
     ~Chart();
 
 private:
-    //QtCharts::QLineSeries *series;
     SegmentQLineSeries* series;
     QtCharts::QValueAxis *xAxis;
     QtCharts::QValueAxis *yAxis;
@@ -52,4 +51,4 @@ private:
     qreal xAxisMin;
 };
 
-#endif // CHART_H
+#endif

@@ -50,11 +50,6 @@ void SegmentQLineSeries::append(QPointF point) {
 		pen.setWidth(width);
 		currentSegment->setPen(pen);
 
-		/*currentSegment->setUseOpenGL(true);
-		chart->addSeries(currentSegment);
-		
-		currentSegment->attachAxis(xAxis);
-		currentSegment->attachAxis(yAxis);*/
 		emit newSegmentAppend(currentSegment);
 	}
 	else {

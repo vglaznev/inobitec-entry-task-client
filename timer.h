@@ -21,4 +21,4 @@ private:
     QElapsedTimer *timer;
 };
 
-#endif // TIMER_H
+#endif

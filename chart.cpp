@@ -8,7 +8,7 @@ using QtCharts::QValueAxis;
 
 Chart::Chart(QGraphicsItem *parent)
     : QtCharts::QChart(parent),
-      //series(new QLineSeries(this)),
+      series(new SegmentQLineSeries(this)),
       xAxis(new QValueAxis(this)),
       yAxis(new QValueAxis(this)),
       seriesPen(QPen(Qt::red)),
@@ -23,21 +23,12 @@ Chart::Chart(QGraphicsItem *parent)
 {
     legend()->hide();
 
-    series = new SegmentQLineSeries(this);
-
-    /*addSeries(series);
-    series->setPen(seriesPen);
-    series->setUseOpenGL(true);*/
-
     xAxis->setTickType(QValueAxis::TicksDynamic);
     xAxis->setTickAnchor(0.0);
     xAxis->setTickInterval(2);
 
     addAxis(xAxis, Qt::AlignBottom);
     addAxis(yAxis, Qt::AlignLeft);
-
-    /*series->attachAxis(xAxis);
-    series->attachAxis(yAxis);*/
 
     xAxis->setRange(xAxisMin, xAxisMax);
     yAxis->setRange(yAxisMin, yAxisMax);
@@ -50,28 +41,22 @@ Chart::~Chart() { }
 
 void Chart::flush()
 {
-    //series->clear();
     series->clear();
     xAxis->setRange(0, zoomX * xAxisMax);
 }
 
 void Chart::setSignalWidth(int width)
 {
-    //seriesPen.setWidth(width);
-    //series->setPen(seriesPen);
     series->setWidth(width);
 }
 
 void Chart::setSignalColor(QColor color, SegmentQLineSeries::SegmentType segmentType)
 {
-    //seriesPen.setColor(color);
-    //series->setPen(seriesPen);
     series->setColor(color, segmentType);
 }
 
 void Chart::render(QPointF point)
 {
-    //series->append(point);
     series->append(point);
 
     // Если на графике достаточно много точек, убираем половину,
@@ -111,7 +96,7 @@ void Chart::zoomPeriod(qreal zoom)
 {
     if (zoom > 0) {
         zoomX = zoom;
-        if (/*series->count() == 0 || series->at(series->count() - 1).x()*/ series->size() == 0 || series->getLastPoint().x() < zoomX * DEFAULT_X_SIZE) {
+        if (series->size() == 0 || series->getLastPoint().x() < zoomX * DEFAULT_X_SIZE) {
             xAxis->setMax(zoomX * xAxisMax);
         } else {
             xAxis->setMin(xAxis->max() - zoomX * (xAxisMax - xAxisMin));
