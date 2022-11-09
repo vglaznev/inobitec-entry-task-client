@@ -62,9 +62,6 @@ void SegmentQLineSeries::append(QPointF point) {
 
 void SegmentQLineSeries::clear() {
 	numberOfPoints = 0;
-	for (auto segment : segments) {
-		chart->removeSeries(segment);
-	}
 	segments.clear();
 	segmentTypeIndexes[INCREASING].clear();
 	segmentTypeIndexes[DECREASING].clear();

@@ -41,6 +41,7 @@ Chart::~Chart() { }
 
 void Chart::flush()
 {
+    removeAllSeries();
     series->clear();
     xAxis->setRange(0, zoomX * xAxisMax);
 }

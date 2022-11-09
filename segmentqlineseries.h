@@ -42,10 +42,6 @@ signals:
 	void newSegmentAppend(QtCharts::QLineSeries*);
 
 private:
-	QtCharts::QChart* chart;
-	QtCharts::QValueAxis* xAxis;
-	QtCharts::QValueAxis* yAxis;
-
 	QHash<SegmentType, QColor> segmentTypeColor;
 	int width;
 
