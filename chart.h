@@ -26,6 +26,7 @@ public slots:
 
 private slots:
     void attachNewSegment(QtCharts::QLineSeries*);
+    void removeSegment(QtCharts::QLineSeries*);
 
 public:
     explicit Chart(QGraphicsItem *parent = nullptr);

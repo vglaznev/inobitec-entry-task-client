@@ -35,14 +35,17 @@ Chart::Chart(QGraphicsItem *parent)
 
 
     connect(series, &SegmentQLineSeries::newSegmentAppend, this, &Chart::attachNewSegment);
+    connect(series, &SegmentQLineSeries::segmentRemoved, this, &Chart::removeSegment);
 }
 
-Chart::~Chart() { }
+Chart::~Chart() { 
+    series->clear();
+}
 
 void Chart::flush()
 {
-    removeAllSeries();
     series->clear();
+    removeAllSeries();
     xAxis->setRange(0, zoomX * xAxisMax);
 }
 
@@ -112,4 +115,8 @@ void Chart::attachNewSegment(QLineSeries* segment)
 
     segment->attachAxis(xAxis);
     segment->attachAxis(yAxis);
+}
+
+void Chart::removeSegment(QLineSeries* segment) {
+    removeSeries(segment);
 }
