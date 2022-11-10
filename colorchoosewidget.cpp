@@ -20,8 +20,10 @@ ColorChooseWidget::ColorChooseWidget(QWidget* parent) :
 
 	connect(button, &QPushButton::clicked, this, [this]() {
 		QColor color = QColorDialog::getColor(getColor(), this, "Выберите цвет");
-		setColor(color);
-		emit colorChanged(color);
+		if (color.isValid()) {
+			setColor(color);
+			emit colorChanged(color);
+		}
 	});
 }
 
