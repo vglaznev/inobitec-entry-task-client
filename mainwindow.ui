@@ -322,7 +322,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Отображать зоны возрастания/убывания</string>
+        <string>Не отображать зоны возрастания/убывания</string>
        </property>
       </widget>
      </item>
