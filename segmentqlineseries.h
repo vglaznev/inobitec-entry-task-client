@@ -3,7 +3,8 @@
 
 #include <QObject>
 #include <QHash>
-#include <QVector>
+#include <QQueue>
+#include <memory>
 
 namespace QtCharts {
 	class QChart;
@@ -17,7 +18,7 @@ class SegmentQLineSeries : public QObject
 	Q_OBJECT
 
 public:
-	explicit SegmentQLineSeries(QObject* parent = nullptr);
+	explicit SegmentQLineSeries(QObject* parent = nullptr, int _maxNumberOfPoints = 2000, int _maxNumberOfSegments = 15);
 	~SegmentQLineSeries();
 
 	void append(QPointF);
@@ -40,17 +41,24 @@ public:
 signals:
 
 	void newSegmentAppend(QtCharts::QLineSeries*);
+	void segmentRemoved(QtCharts::QLineSeries*);
 
 private:
+	const int maxNumberOfPoints;
+	const int maxNumberOfSegments;
+
 	QHash<SegmentType, QColor> segmentTypeColor;
 	int width;
 
-	QVector<QtCharts::QLineSeries*> segments;
+	QHash<SegmentType, QQueue<QtCharts::QLineSeries*>> segments;
 	int numberOfPoints;
 
-	QHash<SegmentType, QVector<int>> segmentTypeIndexes;
 
 	SegmentType lastSegmentType;
+	SegmentType firstSegmentType;
+
+	void removeFirstSegment();
+	void cleanPointsOnOverFlow();
 };
 
 #endif

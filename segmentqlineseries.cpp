@@ -9,21 +9,23 @@ using QtCharts::QChart;
 using QtCharts::QLineSeries;
 using QtCharts::QValueAxis;
 
-SegmentQLineSeries::SegmentQLineSeries(QObject* parent) :
+SegmentQLineSeries::SegmentQLineSeries(QObject* parent, int _maxNumberOfPoints, int _maxNumberOfSegments) :
 	QObject(parent),
+	maxNumberOfPoints(_maxNumberOfPoints),
+	maxNumberOfSegments(_maxNumberOfSegments),
 	numberOfPoints(0),
 	width(1),
+	firstSegmentType(DECREASING),
 	lastSegmentType(INCREASING)
 {
 	segmentTypeColor.insert(INCREASING, Qt::red);
 	segmentTypeColor.insert(DECREASING, Qt::blue);
 
-	segmentTypeIndexes.insert(INCREASING, QVector<int>());
-	segmentTypeIndexes.insert(DECREASING, QVector<int>());
+	segments.insert(INCREASING, QQueue<QtCharts::QLineSeries*>());
+	segments.insert(DECREASING, QQueue<QtCharts::QLineSeries*>());
 }
 
 SegmentQLineSeries::~SegmentQLineSeries() {
-
 }
 
 void SegmentQLineSeries::append(QPointF point) {
@@ -32,23 +34,22 @@ void SegmentQLineSeries::append(QPointF point) {
 	SegmentType currentSegmentType = DECREASING;
 	
 	if (numberOfPoints != 0) {
-		lastSegment = segments.last();
+		lastSegment = segments[lastSegmentType].last();
 		QPointF lastPointInSeries = lastSegment->at(lastSegment->count() - 1);
 		currentSegmentType = point.y() <= lastPointInSeries.y() ? DECREASING : INCREASING;
 	}
 	
 	if (currentSegmentType != lastSegmentType) {
 		currentSegment = new QLineSeries(this);
-
-		segments.append(currentSegment);
-
-		lastSegmentType = lastSegmentType == INCREASING ? DECREASING : INCREASING;
 		
-		segmentTypeIndexes[lastSegmentType].append(segments.size() - 1);
+		segments[currentSegmentType].enqueue(currentSegment);
+
 		QPen pen;
-		pen.setColor(segmentTypeColor[lastSegmentType]);
+		pen.setColor(segmentTypeColor[currentSegmentType]);
 		pen.setWidth(width);
 		currentSegment->setPen(pen);
+
+		lastSegmentType = currentSegmentType;
 
 		emit newSegmentAppend(currentSegment);
 	}
@@ -58,13 +59,16 @@ void SegmentQLineSeries::append(QPointF point) {
 
 	currentSegment->append(point);
 	numberOfPoints++;
+
+	
 }
 
 void SegmentQLineSeries::clear() {
+	firstSegmentType = DECREASING;
+	lastSegmentType = INCREASING;
 	numberOfPoints = 0;
-	segments.clear();
-	segmentTypeIndexes[INCREASING].clear();
-	segmentTypeIndexes[DECREASING].clear();
+	segments[INCREASING].clear();
+	segments[DECREASING].clear();
 }
 
 void SegmentQLineSeries::setWidth(int _width) {
@@ -74,42 +78,68 @@ void SegmentQLineSeries::setWidth(int _width) {
 		return;
 	}
 
-	QPen pen = segments[segmentTypeIndexes[INCREASING][0]]->pen();
-	pen.setWidth(width);
+	if (!segments[INCREASING].isEmpty()) {
 
-	for (const auto& segmentIndex : segmentTypeIndexes[INCREASING]) {
-		segments[segmentIndex]->setPen(pen);
+		QPen pen = segments[INCREASING][0]->pen();
+		pen.setWidth(width);
+
+		for (const auto& segment : segments[INCREASING]) {
+			segment->setPen(pen);
+		}
 	}
 
-	pen = segments[segmentTypeIndexes[DECREASING][0]]->pen();
-	pen.setWidth(width);
+	if (!segments[DECREASING].isEmpty()) {
 
-	for (const auto& segmentIndex : segmentTypeIndexes[DECREASING]) {
-		segments[segmentIndex]->setPen(pen);
+		QPen pen = segments[DECREASING][0]->pen();
+		pen.setWidth(width);
+
+		for (const auto& segment : segments[DECREASING]) {
+			segment->setPen(pen);
+		}
 	}
 }
 
 void SegmentQLineSeries::setColor(QColor color, SegmentType segmentType) {
 
-	const QVector<int>& indexOfSegments = segmentTypeIndexes[segmentType];
+	const QQueue<QtCharts::QLineSeries*> segmentsOfSpecificType = segments[segmentType];
 	segmentTypeColor[segmentType] = color;
 	
-	if (indexOfSegments.size() == 0) {
-		return;
-	}
+	if (segmentsOfSpecificType.size() != 0) {
 
-	QPen pen = segments[indexOfSegments[0]]->pen();
-	pen.setColor(color);
+		QPen pen = segmentsOfSpecificType[0]->pen();
+		pen.setColor(color);
 
-	for (const auto& segmentIndex : indexOfSegments) {
-		segments[segmentIndex]->setPen(pen);
+		for (const auto& segment : segmentsOfSpecificType) {
+			segment->setPen(pen);
+		}
 	}
 }
 
 QPointF SegmentQLineSeries::getLastPoint() {
-	return segments.last()->at(segments.last()->count() - 1);
+	QLineSeries* lastSegment = segments[lastSegmentType].last();
+	return lastSegment->at(lastSegment->count() - 1);
 }
 
 int SegmentQLineSeries::size() {
 	return numberOfPoints;
+}
+
+void SegmentQLineSeries::removeFirstSegment() {
+	numberOfPoints -= segments[firstSegmentType].head()->count();
+	emit segmentRemoved(segments[firstSegmentType].dequeue());
+	firstSegmentType = (firstSegmentType == INCREASING ? DECREASING : INCREASING);
+}
+
+void SegmentQLineSeries::cleanPointsOnOverFlow() {
+	if (segments[INCREASING].size() + segments[DECREASING].size() > maxNumberOfSegments) {
+		removeFirstSegment();
+	}
+	while (numberOfPoints - segments[firstSegmentType].head()->count() > maxNumberOfPoints) {
+		removeFirstSegment();
+	}
+	if (numberOfPoints > maxNumberOfPoints) {
+		QLineSeries* firstSegment = segments[firstSegmentType].head();
+		firstSegment->replace(firstSegment->points().mid(numberOfPoints - maxNumberOfPoints / 2, numberOfPoints));
+		numberOfPoints = maxNumberOfPoints / 2;
+	}
 }
